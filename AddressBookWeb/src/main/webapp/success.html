@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Success - Address Book</title>
+    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/1250/1250592.png">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+	<style>
+	.success{
+    display: inline-block;
+    padding: 12px 24px;
+    background-color: #03DAC6;
+    color: #000000;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.success:hover {
+    background-color: #00C4B4;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(3, 218, 198, 0.3);
+}
+     
+    </style>
+
+<body>
+     
+    <header>
+        <h1>Address Book</h1>
+        <nav>
+            <a href="./index.html" class="button">Home</a>
+            <a href="./add.html" class="button">Add Contact</a>
+            <a href="./view.html" class="button">View Contacts</a>
+        </nav>
+    </header>
+
+    <main>
+        <div class="success-container">
+            <div class="success-message">
+                <h2>Success!</h2>
+                <p>Contact has been successfully saved.</p>
+                <div class="button">
+                    <a href="add.html" class="success">Add Another Contact</a>
+                    <a href="view.html" class="success">View All Contacts</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>Address Book Application &copy; 2024</p>
+    </footer>
+</body>
+</html> 

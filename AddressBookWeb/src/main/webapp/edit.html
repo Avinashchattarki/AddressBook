@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Contact - Address Book</title>
+    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/1250/1250592.png">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Address Book</h1>
+        <nav>
+            <a href="./index.html" class="button">Home</a>
+            <a href="./add.html" class="button">Add Contact</a>
+            <a href="./view.html" class="button">View Contacts</a>
+        </nav>
+    </header>
+
+    <main>
+        <h2>Edit Contact</h2>
+        <div class="form-container">
+            <form id="editContactForm" action="EditContactServlet" method="POST">
+                <input type="hidden" id="contactId" name="id">
+                
+                <div class="form-group">
+                    <label for="firstName">First Name</label>
+                    <input type="text" id="firstName" name="firstName" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="lastName">Last Name</label>
+                    <input type="text" id="lastName" name="lastName" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Phone</label>
+                    <input type="tel" id="phone" name="phone" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="address">Address</label>
+                    <textarea id="address" name="address" rows="3" required></textarea>
+                </div>
+
+                <div class="form-buttons">
+                    <button type="submit">Save Changes</button>
+                    <a href="./view.html" type="submit" class ="card">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const contactId = urlParams.get('id');
+            if (contactId) {
+                document.getElementById('contactId').value = contactId;
+
+                fetch(`GetContactServlet?id=${contactId}`)
+                    .then(response => response.json())
+                    .then(contact => {
+                        if (contact) {
+                            document.getElementById('firstName').value = contact.firstName;
+                            document.getElementById('lastName').value = contact.lastName;
+                            document.getElementById('phone').value = contact.phone;
+                            document.getElementById('email').value = contact.email;
+                            document.getElementById('address').value = contact.address;
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+            }
+        });
+        
+        document.getElementById('editContactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const data = {};
+            formData.forEach((value, key) => data[key] = value);
+            
+            fetch('EditContactServlet', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams(data)
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result.success) {
+                    window.location.href = result.redirectUrl;
+                } else {
+                    alert('Error updating contact: ' + (result.error || 'Unknown error'));
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error updating contact. Please try again.');
+            });
+        });
+    </script>
+</body>
+</html>

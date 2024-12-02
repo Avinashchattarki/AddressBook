@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Address Book</title>
+    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/1250/1250592.png">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Address Book</h1>
+        <nav>
+            <a href="./index.html" class="button">Home</a>
+            <a href="./add.html" class="button">Add Contact</a>
+            <a href="./view.html" class="button">View Contacts</a>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Cards Section -->
+        <section class="cards-section">
+            <h2>Welcome to Address Book</h2>
+            <p>Manage your contacts efficiently</p>
+            
+            <div class="cards">
+                <!-- Add Contact Card -->
+                <div class="card">
+                    <h3>Add New Contact</h3>
+                    <p>Create a new contact with name, phone, email and address details</p>
+                    <a href="#form-section" class="button" accesskey="n">Add Contact</a>
+                </div>
+                
+                <!-- View Contacts Card -->
+                <div class="card">
+                    <h3>View All Contacts</h3>
+                    <p>See all your contacts, search, edit or delete them</p>
+                    <a href="./view.html" class="button" accesskey="c">View Contacts</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Form Section -->
+        <section id="form-section" class="form-section">
+            <div class="form-container">
+                <h2>Add New Contact</h2>
+                <form action="add-contact" method="POST">
+                    <div class="form-group">
+                        <label for="firstName">First Name:</label>
+                        <input type="text" id="firstName" name="firstName" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="lastName">Last Name:</label>
+                        <input type="text" id="lastName" name="lastName" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Phone:</label>
+                        <input type="tel" id="phone" name="phone" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="address">Address:</label>
+                        <textarea id="address" name="address" rows="3" required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="notes">Notes:</label>
+                        <textarea id="notes" name="notes" rows="3"></textarea>
+                    </div>
+
+                    <div class="form-buttons">
+                        <button type="submit">Submit</button>
+                        <button type="reset">Clear</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+        
+        <script>
+        document.getElementById('addContactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const data = {};
+            formData.forEach((value, key) => data[key] = value);
+            
+            fetch('add-contact', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams(data)
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result.success) {
+                    window.location.href = result.redirectUrl;
+                } else {
+                    // Show error message
+                    alert(result.error);
+                    // Optionally, you can show the error in a more user-friendly way:
+                    const errorDiv = document.getElementById('please verify email id');
+                    if (errorDiv) {
+                        errorDiv.textContent = result.error;
+                        errorDiv.style.display = 'block';
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error adding contact. Please try again.');
+            });
+        });
+        
+        </script>
+    </main>
+
+    <footer>
+        <p>Address Book Application &copy; 2024</p>
+    </footer>
+</body>
+</html>
